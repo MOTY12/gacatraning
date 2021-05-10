@@ -1,0 +1,1 @@
+mongodb+srv://opeyemi2944:opeyemi2944@cluster0.vxgid.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
