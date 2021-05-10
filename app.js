@@ -26,6 +26,14 @@ const blogRoutes = require('./routes/blog')
 const tagRoutes = require('./routes/tag')
 const commentRoutes = require('./routes/comment')
 
+
+
+
+app.get('/', (res, req)=>{
+    res.send('working!!!')
+})
+
+
 //route middleware
 app.use(`${apis}`, trainingRoutes)
 app.use(`${apis}`, fieldRoutes)
