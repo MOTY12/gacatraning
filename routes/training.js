@@ -45,17 +45,47 @@ router.get('/top/:id', async(req,res)=>{
 })
 
 
-//count the number of candidate
-router.get('/count', async (req,res)=>{
-   const countcandidate =  await Training.countDocuments((count) => count)
+// //count the number of candidate
+// router.get('/count', async (req,res)=>{
+//    const countcandidate =  await Training.countDocuments((count) => count)
     
-    if(!countcandidate){
-        res.status(200).send('No candidate Found')
+//     if(!countcandidate){
+//         res.status(200).send('No candidate Found')
+//     }
+//     res.status(500).send({candidatecount: countcandidate})
+//     // console.log(countcandidate)
+//     })
+    
+
+//update the training
+router.put('/top/:id', async(req, res) => {
+    const updatetraining= await shopSchema.findByIdAndUpdate(
+        req.params.id,
+        {
+            banner: req.body.banner,
+            trainingTitle: req.body.trainingTitle,
+            courseTitle: req.body.courseTitle,
+            description: req.body.description,
+            form: req.body.form
+        },
+        {
+            new:true
+        }
+    )
+    if(!updatetraining){
+        res.status(500).json({
+            success: false,
+            message: "the shop cannot be found"
+        })
+    }else{
+        res.send(updatetraining)
     }
-    res.status(500).send({candidatecount: countcandidate})
-    // console.log(countcandidate)
-    })
-    
+   
+})
+
+
+
+
 
     //delete the training
 
