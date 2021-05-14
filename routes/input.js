@@ -135,7 +135,7 @@ router.get('/countfieldname', async (req,res)=>{
      }
     const countcandidate =  await FieldInput.countDocuments(counttheno)
     if(!countcandidate){
-        res.status(500).json({success: false, message: "there is no candidate"})
+        res.status(500).json({success: false, message: "there is no candidate for this training"})
     }else{
         res.status(200).send({candidateno: countcandidate})
     }
