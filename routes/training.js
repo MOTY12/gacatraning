@@ -75,7 +75,7 @@ router.put('/top/:id', async(req, res) => {
     if(!updatetraining){
         res.status(500).json({
             success: false,
-            message: "the shop cannot be found"
+            message: "the training information cannot be found"
         })
     }else{
         res.send(updatetraining)

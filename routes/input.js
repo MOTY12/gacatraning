@@ -118,7 +118,7 @@ router.put('/inputfields/:id', async(req, res) => {
     if(!updatecandidate){
         res.status(500).json({
             success: false,
-            message: "the shop cannot be found"
+            message: "the candidate cannot be found"
         })
     }else{
         res.send(updatecandidate)
