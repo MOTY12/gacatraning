@@ -127,6 +127,21 @@ router.put('/inputfields/:id', async(req, res) => {
 })
 
 
+//count the number of candidate fields name "608c91417395521a3c77a050"
+router.get('/countfieldname', async (req,res)=>{
+    let  counttheno = {}
+     if(req.query.fieldName){
+        counttheno = {fieldName: req.query.fieldName}
+     }
+    const countcandidate =  await FieldInput.countDocuments(counttheno)
+    if(!countcandidate){
+        res.status(500).json({success: false, message: "there is no candidate"})
+    }else{
+        res.status(200).send({candidateno: countcandidate})
+    }
+     })
+    
+
 
 
 module.exports = router
