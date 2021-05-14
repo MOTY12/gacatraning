@@ -1,9 +1,6 @@
 const express = require('express')
 const router = express.Router()
-//const InputField = require('../model/input') 
 const FieldInput = require('../model/fieldinput')
-// const ExcelJs = require('exceljs')
-// const moment = require('moment')
 
 
 
@@ -98,13 +95,17 @@ res.status(200).json({data: inputField})
 })        
 
 
+//count the number of candidate
+router.get('/inputcount', async (req,res)=>{
+    const countcandidate =  await FieldInput.countDocuments((count) => count)
+     
+     if(!countcandidate){
+         res.status(200).send('No candidate Found')
+     }
+     res.status(500).send({candidatecount: countcandidate})
+     console.log(countcandidate)
+     })
 
-// get new training
-router.get('/excelre', async (req, res)=>{
-    const inputField = await FieldInput.find()
-//console.log(inputField)
-res.status(200).json({inputField})
-})        
 
 
 module.exports = router
