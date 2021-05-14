@@ -5,14 +5,6 @@ const FieldInput = require('../model/fieldinput')
 
 
 router.post('/inputfields', async (req, res)=>{
-    // const inputFieldIds = Promise.all(req.body.inputFields.map(async(inputField) => {
-    //     let newInputField = new InputField({
-    //         inputtext: inputField.inputtext
-    //     })
-    //    newInputField = await newInputField.save()
-    //    return newInputField._id
-    // }))
-   // inputFieldIdsResolved = await inputFieldIds
     const inputsFields = new FieldInput({
         fieldName: req.body.fieldName,
         inputFields: req.body.inputFields
@@ -27,7 +19,7 @@ router.post('/inputfields', async (req, res)=>{
 
 
 
-// get new training
+// get new candidate
 router.get('/inputfields', async (req, res)=>{
     const inputField = await FieldInput.find()
 if (!inputField) {
@@ -78,21 +70,21 @@ router.delete('/inputfields/:id', async(req, res) => {
     
 //filter by by form name 
 
-router.get('/inputfields', async (req, res)=>{
-    let filter= {}
-    if(req.query.fieldsnames){
-        const filter = {fieldname: req.query.fieldsnames.split(',')}
-    }
-    const inputField = await FieldInput.find('filter').populate('fieldName')
-if (!inputField) {
-    res.status(500).json({
-        success: false,
-        message: "No field found "
-    })
-}
+// router.get('/inputfields', async (req, res)=>{
+//     let filter= {}
+//     if(req.query.fieldsnames){
+//         const filter = {fieldname: req.query.fieldsnames.split(',')}
+//     }
+//     const inputField = await FieldInput.find('filter').populate('fieldName')
+// if (!inputField) {
+//     res.status(500).json({
+//         success: false,
+//         message: "No field found "
+//     })
+// }
 
-res.status(200).json({data: inputField})
-})        
+// res.status(200).json({data: inputField})
+// })        
 
 
 //count the number of candidate
@@ -105,6 +97,35 @@ router.get('/inputcount', async (req,res)=>{
      res.status(500).send({candidatecount: countcandidate})
      console.log(countcandidate)
      })
+
+
+
+
+
+     
+//update the candidate
+router.put('/top/:id', async(req, res) => {
+    const updatecandidate= await FieldInput.findByIdAndUpdate(
+        req.params.id,
+        {
+            fieldName: req.body.fieldName,
+            inputFields: req.body.inputFields
+        },
+        {
+            new:true
+        }
+    )
+    if(!updatecandidate){
+        res.status(500).json({
+            success: false,
+            message: "the shop cannot be found"
+        })
+    }else{
+        res.send(updatecandidate)
+    }
+   
+})
+
 
 
 
