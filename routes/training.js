@@ -59,7 +59,7 @@ router.get('/top/:id', async(req,res)=>{
 
 //update the training
 router.put('/top/:id', async(req, res) => {
-    const updatetraining= await shopSchema.findByIdAndUpdate(
+    const updatetraining= await Training.findByIdAndUpdate(
         req.params.id,
         {
             banner: req.body.banner,
