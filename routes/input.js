@@ -21,7 +21,7 @@ router.post('/inputfields', async (req, res)=>{
 
 // get new candidate
 router.get('/inputfields', async (req, res)=>{
-    const inputField = await FieldInput.find()
+    const inputField = await FieldInput.find().populate('fieldName')
 if (!inputField) {
     res.status(500).json({
         success: false,
@@ -35,11 +35,11 @@ res.status(200).json({inputField})
 //get by field id
 
 router.get('/inputfields/:id', async(req,res)=>{
-    const inputFieldid = await FieldInput.findById(req.params.id)
+    const inputFieldid = await FieldInput.findById(req.params.id).populate('fieldName')
     if(!inputFieldid){
     res.status(500).json({
         success: false,
-        message: "No registered candidate"
+        message: "No candidate related to this request"
     })
 }
     res.status(200).json({inputFieldid})
