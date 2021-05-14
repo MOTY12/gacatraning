@@ -104,7 +104,7 @@ router.get('/inputcount', async (req,res)=>{
 
      
 //update the candidate
-router.put('/top/:id', async(req, res) => {
+router.put('/inputfields/:id', async(req, res) => {
     const updatecandidate= await FieldInput.findByIdAndUpdate(
         req.params.id,
         {
