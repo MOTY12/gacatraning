@@ -90,7 +90,7 @@ router.get('/top/:id', async(req,res)=>{
 //     })
     
 
-//update the training
+//update the trainings
 router.put('/top/:id', async(req, res) => {
     const updatetraining= await Training.findByIdAndUpdate(
         req.params.id,
