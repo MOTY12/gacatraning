@@ -143,5 +143,19 @@ router.get('/countfieldname', async (req,res)=>{
     
 
 
+// find candidate by training
+router.get('/findtraining', async (req,res)=>{
+    let  fieldnameid = {}
+     if(req.query.fieldName){
+        fieldnameid = {fieldName: req.query.fieldName}
+     }
+    const countcandidate =  await FieldInput.find(fieldnameid)
+    if(!countcandidate){
+        res.status(500).json({success: false, message: "there is no candidate"})
+    }else{
+        res.status(200).send({fieldnameid: countcandidate})
+    }
+     })
+
 
 module.exports = router
