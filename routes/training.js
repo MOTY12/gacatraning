@@ -91,11 +91,22 @@ router.get('/top/:id', async(req,res)=>{
     
 
 //update the trainings
-router.put('/top/:id', async(req, res) => {
+  
+
+
+router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
+      
+    //input to the trainiing data
+    const file = req.file 
+    if(!file) return res.status(400).send('No image is uploaded, upload a image ')
+    
+    const fileName = req.file.filename
+    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
+
     const updatetraining= await Training.findByIdAndUpdate(
         req.params.id,
         {
-            banner: req.body.banner,
+            banner: `${basePath}${fileName}`,
             trainingTitle: req.body.trainingTitle,
             courseTitle: req.body.courseTitle,
             description: req.body.description,
