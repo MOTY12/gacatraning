@@ -29,11 +29,6 @@ const commentRoutes = require('./routes/comment')
 
 
 
-// app.get('/', (res, req)=>{
-//     res.send('working!!!')
-// })
-
-
 //route middleware
 app.use(`${apis}`, trainingRoutes)
 app.use(`${apis}`, fieldRoutes)
