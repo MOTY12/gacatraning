@@ -90,44 +90,39 @@ router.get('/top/:id', async(req,res)=>{
 //     })
     
 
-//update the trainings
-  
-
-
+//update the trainingss 
 router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
       
-    //input to the trainiing data
-    const file = req.file 
-    if(!file) return res.status(400).send('No image is uploaded, upload a image ')
+        //input to the trainiing data
+        const file = req.file 
+        if(!file) return res.status(400).send('No image is uploaded, upload a image ')
+        
+        const fileName = req.file.filename
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
     
-    const fileName = req.file.filename
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
-
-    const updatetraining= await Training.findByIdAndUpdate(
-        req.params.id,
-        {
-            banner: `${basePath}${fileName}`,
-            trainingTitle: req.body.trainingTitle,
-            courseTitle: req.body.courseTitle,
-            description: req.body.description,
-            form: req.body.form
-        },
-        {
-            new:true
+        const updatetraining= await Training.findByIdAndUpdate(
+            req.params.id,
+            {
+                banner: `${basePath}${fileName}`,
+                trainingTitle: req.body.trainingTitle,
+                courseTitle: req.body.courseTitle,
+                description: req.body.description,
+                form: req.body.form
+            },
+            {
+                new:true
+            }
+        )
+        if(!updatetraining){
+            res.status(500).json({
+                success: false,
+                message: "the training information cannot be found"
+            })
+        }else{
+            res.send(updatetraining)
         }
-    )
-    if(!updatetraining){
-        res.status(500).json({
-            success: false,
-            message: "the training information cannot be found"
-        })
-    }else{
-        res.send(updatetraining)
-    }
-   
-})
-
-
+       
+    })
 
 
 
