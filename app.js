@@ -29,9 +29,9 @@ const commentRoutes = require('./routes/comment')
 
 
 
-app.get('/', (res, req)=>{
-    res.send('working!!!')
-})
+// app.get('/', (res, req)=>{
+//     res.send('working!!!')
+// })
 
 
 //route middleware
