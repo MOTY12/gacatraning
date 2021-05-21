@@ -114,5 +114,27 @@ router.get('/top/:id', async(req,res)=>{
        
     })
 
+
+
+    //delete the training
+
+    router.delete('/top/:id', async(req, res) => {
+        const training = await Training.findByIdAndRemove(req.params.id)
+        .then(training => {if(training){
+           return res.status(200).json({
+               success: true,
+               message: "Successfully deleted"
+           })
+        }else{
+            return res.status(200).json({
+                success: false,
+                message: "No candidate found"
+            })
+        }
+        }).catch(err=>{
+              return res.status(400).json({
+                success: false,
+                error: err})
+        }) })
     
 module.exports = router                 
