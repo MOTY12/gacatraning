@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Training = require('../model/training') 
+
 const multer = require('multer')
 
 const FILE_TYPE_MAP={
@@ -26,17 +27,17 @@ const storage = multer.diskStorage({
   })
    
   const uploadOptions = multer({ storage: storage })
+  
 
 //insert new training 
 router.post('/top', uploadOptions.single('banner'), async (req, res) => {
-    
-//input to the trainiing data
-const file = req.file 
-if(!file) return res.status(400).send('No image is uploaded, upload a image ')
 
-const fileName = req.file.filename
-const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
+//inpput to the trainiing data
+    const file = req.file 
+    if(!file) return res.status(400).send('No image is uploaded, upload a image ')
 
+    const fileName = req.file.filename
+    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
         const training = new Training({
             banner: `${basePath}${fileName}`,
             trainingTitle: req.body.trainingTitle,
@@ -63,35 +64,24 @@ router.get('/top/',async (req, res)=>{
     }
 })             
 
-
 //get new training by id
 router.get('/top/:id', async(req,res)=>{
-    const trainingid = await Training.findById(req.params.id)
-    //.populate('form', 'fieldName')
-    if(!trainingid){
-    res.status(500).json({
-        success: false,
-        message: "No data for the field requested"
+        const trainingid = await Training.findById(req.params.id)
+        //.populate('form', 'fieldName')
+        if(!trainingid){
+        res.status(500).json({
+            success: false,
+            message: "No data for the field requested"
+        })
+    }
+        res.status(200).json({data: trainingid})
     })
-}
-    res.status(200).json({data: trainingid})
-})
 
 
-// //count the number of candidate
-// router.get('/count', async (req,res)=>{
-//    const countcandidate =  await Training.countDocuments((count) => count)
-    
-//     if(!countcandidate){
-//         res.status(200).send('No candidate Found')
-//     }
-//     res.status(500).send({candidatecount: countcandidate})
-//     // console.log(countcandidate)
-//     })
-    
 
-//update the trainingss 
-router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
+
+
+    router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
       
         //input to the trainiing data
         const file = req.file 
@@ -124,29 +114,5 @@ router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
        
     })
 
-
-
-    //delete the training
-
-    router.delete('/top/:id', async(req, res) => {
-        const training = await Training.findByIdAndRemove(req.params.id)
-        .then(training => {if(training){
-           return res.status(200).json({
-               success: true,
-               message: "Successfully deleted"
-           })
-        }else{
-            return res.status(200).json({
-                success: false,
-                message: "No candidate found"
-            })
-        }
-        }).catch(err=>{
-              return res.status(400).json({
-                success: false,
-                error: err})
-        }) })
-
-
-
-module.exports = router
+    
+module.exports = router                 
