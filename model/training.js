@@ -17,6 +17,10 @@ const trainingSchema = new mongoose.Schema({
     form:{
         type: String
     },
+    countcandidate: {
+        type: Number,
+        dafault: '0'
+    },
     dateCreated: {
         type: Date,
         default: Date.now()
