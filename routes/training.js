@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const Training = require('../model/training') 
+const fieldInput = require('../model/fieldinput')
+const Training = require('../model/training')
 
 const multer = require('multer')
 
@@ -63,6 +64,31 @@ router.get('/top/',async (req, res)=>{
         })
     }
 })             
+
+
+//how to count candidate
+router.get('/candidatebytraining', async (req, res) => { 
+  
+    const array_elements  = await fieldInput.find().select('fieldName')
+    array_elements.sort();
+
+    var current = null;
+    var cnt = {};
+    for (var i = 1; i < array_elements.length; i++) {
+        if(cnt[array_elements[i].fieldName]) {
+            cnt[array_elements[i].fieldName] =  cnt[array_elements[i].fieldName] + 1;
+        }else {
+            cnt[array_elements[i].fieldName] = 1;
+        }
+    }
+    console.log(cnt);
+
+})
+
+
+
+
+
 
 //get new training by id
 router.get('/top/:id', async(req,res)=>{
