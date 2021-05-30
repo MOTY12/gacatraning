@@ -21,7 +21,7 @@ router.post('/inputfields', async (req, res)=>{
 
 // get new candidate
 router.get('/inputfields', async (req, res)=>{
-    const inputField = await FieldInput.find().populate('fieldName')
+    const inputField = await FieldInput.find().populate('fieldName').sort({dateCreated: -1})
 if (!inputField) {
     res.status(500).json({
         success: false,
