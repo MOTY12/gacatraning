@@ -2,58 +2,33 @@ const express = require('express')
 const router = express.Router()
 const fieldInput = require('../model/fieldinput')
 const Training = require('../model/training')
-
-const multer = require('multer')
-
-const FILE_TYPE_MAP={
-     'image/png': 'png',
-     'image/jpeg': 'jpeg',
-     'image/jpg': 'jpg'
-}
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const isVaild = FILE_TYPE_MAP[file.mimetype]
-        let uploadError = new Error('invalid image type')
-        if(isVaild){
-            uploadError = null
-        }
-      cb(uploadError, './public/uploads')
-    },
-    filename: function (req, file, cb) {
-        const fileName = file.originalname.split(' ').join('_')
-        const extension = FILE_TYPE_MAP[file.mimetype]
-      cb(null, `${fileName}-${Date.now()}.${extension}`)
-    }
-  })
-   
-  const uploadOptions = multer({ storage: storage })
-  
-
-//insert new training 
-router.post('/top', uploadOptions.single('banner'), async (req, res) => {
-
-//inpput to the trainiing data
-    const file = req.file 
-    if(!file) return res.status(400).send('No image is uploaded, upload a image ')
-
-    const fileName = req.file.filename
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
-        const training = new Training({
-            banner: `${basePath}${fileName}`,
-            trainingTitle: req.body.trainingTitle,
-            courseTitle: req.body.courseTitle,
-            description: req.body.description,
-            form: req.body.form
-        })
-       const trainings= await training.save()
-        if(!trainings)
-        return res.status(404).send({message: 'Training cannot be created'})
-        res.send({data: trainings})
-        
-    })
+const cloudinary = require('cloudinary').v2
 
 
+cloudinary.config({
+    cloud_name: 'moty',
+    api_key:  '615853392486882',
+    api_secret: 'dcRHd85UruOszV-PBtog6itjQb8'
+});
+
+            
+//insert new  training
+router.post('/upload', async(req, res) => {
+    const file = req.files.image
+ cloudinary.uploader.upload(file.tempFilePath, async function(error, result) {
+       const tom = result.secure_url
+       const training = new Training({
+                    banner: tom,
+                    trainingTitle: req.body.trainingTitle,
+                    courseTitle: req.body.courseTitle,
+                    description: req.body.description,
+                    form: req.body.form
+                })
+                const trainings= await training.save()
+                        if(!trainings)return res.status(404).send({message: 'Training cannot be created'})
+                        res.send({data: trainings})
+                })
+            });
 
 
 //get new training

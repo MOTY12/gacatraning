@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const bodyparser = require('body-parser')
 const json2xls = require('json2xls')
 const cors = require('cors') 
+const fileupload = require('express-fileupload'); 
 const dotenv = require('dotenv')
 const app = express()
 
@@ -15,7 +16,7 @@ app.use(cors())
 app.use(json2xls.middleware)
 app.options('*', cors())
 app.use(bodyparser.json())
-app.use('/public/uploads', express.static(__dirname + '/public/uploads'))
+app.use(fileupload({useTempFiles: true}))
 
 //import routes
 const trainingRoutes = require('./routes/training')
