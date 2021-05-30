@@ -53,9 +53,46 @@ router.post('/top', uploadOptions.single('banner'), async (req, res) => {
         
     })
 
+
+
+
 //get new training
 router.get('/top/',async (req, res)=>{
-        const traininglist = await Training.find()
+  //  const countcandidate = await FieldInput.countDocuments({fieldName: req.query.fieldName})
+
+  const array_elements = await fieldInput.find().select('fieldName')
+  array_elements.sort();
+
+  var current = null;
+  var cnt = {};
+  for (var i = 1; i < array_elements.length; i++) {
+      if (cnt[array_elements[i].fieldName]) {
+          cnt[array_elements[i].fieldName] = cnt[array_elements[i].fieldName] + 1;
+      } else {
+          cnt[array_elements[i].fieldName] = 1;
+      }
+  }
+  // console.log(cnt);
+  for (var key in cnt) {
+      // console.log(key);
+      const filter = { _id: key };
+      const retrieved = await Training.findOne(filter);
+      // console.log(retrieved);
+      if (retrieved != null) {
+          retrieved.countcandidate = cnt[key];
+          await retrieved.save();
+          doc = await Training.findOne(filter);
+          
+          //res.json(doc);
+        //   console.log(doc.courseTitle);
+        //   console.log(doc.countcandidate);
+      }
+  }
+
+
+
+
+    const traininglist = await Training.find().sort({dateCreated: -1})
     res.json({data: traininglist})
     if (!traininglist) {
         res.status(500).json({
@@ -63,45 +100,88 @@ router.get('/top/',async (req, res)=>{
             message: "No training found "
         })
     }
-})             
+})            
+
+
+
+
+
+
+
+
+
+
+
+// //get new training
+// router.get('/top/',async (req, res)=>{
+//         const traininglist = await Training.find()
+//     res.json({data: traininglist})
+//     if (!traininglist) {
+//         res.status(500).json({
+//             success: false,
+//             message: "No training found "
+//         })
+//     }
+// })             
+
+
+// //how to count candidate
+// router.get('/candidatebytraining', async (req, res) => { 
+  
+//     const array_elements  = await fieldInput.find().select('fieldName')
+//     array_elements.sort();
+
+//     var current = null;
+//     var cnt = {};
+//     for (var i = 1; i < array_elements.length; i++) {
+//         if(cnt[array_elements[i].fieldName]) {
+//             cnt[array_elements[i].fieldName] =  cnt[array_elements[i].fieldName] + 1;
+//         }else {
+//             cnt[array_elements[i].fieldName] = 1;
+//         }
+//     }
+//     console.log(cnt);
+
+// })
+
+
+
+
+
 
 
 //how to count candidate
-router.get('/candidatebytraining', async (req, res) => { 
-  
-    const array_elements  = await fieldInput.find().select('fieldName')
+router.get('/candidatebytraining', async(req, res) => {
+
+    const array_elements = await fieldInput.find().select('fieldName')
     array_elements.sort();
 
     var current = null;
     var cnt = {};
     for (var i = 1; i < array_elements.length; i++) {
-        if(cnt[array_elements[i].fieldName]) {
-            cnt[array_elements[i].fieldName] =  cnt[array_elements[i].fieldName] + 1;
-        }else {
+        if (cnt[array_elements[i].fieldName]) {
+            cnt[array_elements[i].fieldName] = cnt[array_elements[i].fieldName] + 1;
+        } else {
             cnt[array_elements[i].fieldName] = 1;
         }
     }
-    console.log(cnt);
-
-})
-
-
-
-
-
-
-//get new training by id
-router.get('/top/:id', async(req,res)=>{
-        const trainingid = await Training.findById(req.params.id)
-        //.populate('form', 'fieldName')
-        if(!trainingid){
-        res.status(500).json({
-            success: false,
-            message: "No data for the field requested"
-        })
+    // console.log(cnt);
+    for (var key in cnt) {
+        // console.log(key);
+        const filter = { _id: key };
+        const retrieved = await Training.findOne(filter);
+        // console.log(retrieved);
+        if (retrieved != null) {
+            retrieved.countcandidate = cnt[key];
+            await retrieved.save();
+            doc = await Training.findOne(filter);
+            
+            //res.json(doc);
+            console.log(doc.courseTitle);
+            console.log(doc.countcandidate);
+        }
     }
-        res.status(200).json({data: trainingid})
-    })
+})
 
 
 
@@ -111,7 +191,7 @@ router.get('/top/:id', async(req,res)=>{
       
         //input to the trainiing data
         const file = req.file 
-        if(!file) return res.status(400).send('No image is uploaded, upload a image ')
+        //if(!file) return res.status(400).send('No image is uploaded, upload a image ')
         
         const fileName = req.file.filename
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
