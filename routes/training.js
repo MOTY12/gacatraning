@@ -193,6 +193,23 @@ router.get('/candidatebytraining', async(req, res) => {
 
 
 
+
+
+//get new training by id
+router.get('/top/:id', async(req,res)=>{
+        const trainingid = await Training.findById(req.params.id)
+        //.populate('form', 'fieldName')
+        if(!trainingid){
+        res.status(500).json({
+            success: false,
+            message: "No data for the field requested"
+        })
+    }
+        res.status(200).json({data: trainingid})
+    })
+
+
+
     //delete the training
 
     router.delete('/top/:id', async(req, res) => {
