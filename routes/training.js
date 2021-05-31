@@ -161,7 +161,7 @@ router.get('/candidatebytraining', async(req, res) => {
 
 
 
-    router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
+    router.put('/top/:id', async(req, res) => {
       
     const file = req.files.image
     cloudinary.uploader.upload(file.tempFilePath, async function(error, result) {
