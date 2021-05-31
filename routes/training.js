@@ -13,7 +13,7 @@ cloudinary.config({
 
             
 //insert new  training
-router.post('/upload', async(req, res) => {
+router.post('/top', async(req, res) => {
     const file = req.files.image
  cloudinary.uploader.upload(file.tempFilePath, async function(error, result) {
        const tom = result.secure_url
