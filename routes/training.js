@@ -161,20 +161,16 @@ router.get('/candidatebytraining', async(req, res) => {
 
 
 
-
     router.put('/top/:id', uploadOptions.single('banner'), async(req, res) => {
       
-        //input to the trainiing data
-        const file = req.file 
-        //if(!file) return res.status(400).send('No image is uploaded, upload a image ')
-        
-        const fileName = req.file.filename
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
+    const file = req.files.image
+    cloudinary.uploader.upload(file.tempFilePath, async function(error, result) {
+      const tom = result.secure_url
     
         const updatetraining= await Training.findByIdAndUpdate(
             req.params.id,
             {
-                banner: `${basePath}${fileName}`,
+                banner: tom,
                 trainingTitle: req.body.trainingTitle,
                 courseTitle: req.body.courseTitle,
                 description: req.body.description,
@@ -182,8 +178,8 @@ router.get('/candidatebytraining', async(req, res) => {
             },
             {
                 new:true
-            }
-        )
+            })
+    })
         if(!updatetraining){
             res.status(500).json({
                 success: false,
