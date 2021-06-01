@@ -14,9 +14,9 @@ cloudinary.config({
             
 //insert new  training
 router.post('/top', async(req, res) => {
-    const file = req.files.image
- cloudinary.uploader.upload(file.tempFilePath, async function(error, result) {
-       const tom = result.secure_url
+    const file = req.files.banner
+     const result = await cloudinary.uploader.upload( file.tempFilePath)
+      const tom = result.url
        const training = new Training({
                     banner: tom,
                     trainingTitle: req.body.trainingTitle,
@@ -27,8 +27,9 @@ router.post('/top', async(req, res) => {
                 const trainings= await training.save()
                         if(!trainings)return res.status(404).send({message: 'Training cannot be created'})
                         res.send({data: trainings})
-                })
-            });
+                 })
+
+
 
 
 //get new training
@@ -75,53 +76,7 @@ router.get('/top/',async (req, res)=>{
             message: "No training found "
         })
     }
-})            
-
-
-
-
-
-
-
-
-
-
-
-// //get new training
-// router.get('/top/',async (req, res)=>{
-//         const traininglist = await Training.find()
-//     res.json({data: traininglist})
-//     if (!traininglist) {
-//         res.status(500).json({
-//             success: false,
-//             message: "No training found "
-//         })
-//     }
-// })             
-
-
-// //how to count candidate
-// router.get('/candidatebytraining', async (req, res) => { 
-  
-//     const array_elements  = await fieldInput.find().select('fieldName')
-//     array_elements.sort();
-
-//     var current = null;
-//     var cnt = {};
-//     for (var i = 1; i < array_elements.length; i++) {
-//         if(cnt[array_elements[i].fieldName]) {
-//             cnt[array_elements[i].fieldName] =  cnt[array_elements[i].fieldName] + 1;
-//         }else {
-//             cnt[array_elements[i].fieldName] = 1;
-//         }
-//     }
-//     console.log(cnt);
-
-// })
-
-
-
-
+}) 
 
 
 
