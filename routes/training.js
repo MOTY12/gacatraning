@@ -114,38 +114,40 @@ router.get('/candidatebytraining', async(req, res) => {
 })
 
 
-
-
-    router.put('/top/:id', async(req, res) => {
-      
-    const file = req.files.image
-    cloudinary.uploader.upload(file.tempFilePath, async function(error, result) {
-      const tom = result.secure_url
-    
-        const updatetraining= await Training.findByIdAndUpdate(
-            req.params.id,
-            {
-                banner: tom,
-                trainingTitle: req.body.trainingTitle,
-                courseTitle: req.body.courseTitle,
-                description: req.body.description,
-                form: req.body.form
-            },
-            {
-                new:true
-            })
-    })
-        if(!updatetraining){
-            res.status(500).json({
-                success: false,
-                message: "the training information cannot be found"
-            })
-        }else{
-            res.send(updatetraining)
-        }
+//update training
+router.put('/top/:id', async(req, res) => {
+    try {
+        const file = req.files.banner
+        const result = await cloudinary.uploader.upload(file.tempFilePath)
+         const tom = result.url
        
-    })
-
+           const updatetraining= await Training.findByIdAndUpdate(
+               req.params.id,
+               {
+                   banner: tom,
+                   trainingTitle: req.body.trainingTitle,
+                   courseTitle: req.body.courseTitle,
+                   description: req.body.description,
+                   form: req.body.form
+               },
+               {
+                   new:true
+               }
+               )
+           if(!updatetraining){
+               res.status(500).json({
+                   success: false,
+                   message: "the training information cannot be found"
+               })
+           }else{
+               res.send(updatetraining)
+           }
+      
+      } catch (err) {
+        console.log(err);
+      }
+    });
+    
 
 
 
