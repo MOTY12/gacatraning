@@ -114,39 +114,39 @@ router.get('/candidatebytraining', async(req, res) => {
 })
 
 
-//update training
-router.put('/top/:id', async(req, res) => {
-    try {
-        const file = req.files.banner
-        const result = await cloudinary.uploader.upload(file.tempFilePath)
-         const tom = result.url
+// //update training
+// router.put('/top/:id', async(req, res) => {
+//     try {
+//         const file = req.files.banner
+//         const result = await cloudinary.uploader.upload(file.tempFilePath)
+//          const tom = result.url
        
-           const updatetraining= await Training.findByIdAndUpdate(
-               req.params.id,
-               {
-                   banner: tom,
-                   trainingTitle: req.body.trainingTitle,
-                   courseTitle: req.body.courseTitle,
-                   description: req.body.description,
-                   form: req.body.form
-               },
-               {
-                   new:true
-               }
-               )
-           if(!updatetraining){
-               res.status(500).json({
-                   success: false,
-                   message: "the training information cannot be found"
-               })
-           }else{
-               res.send(updatetraining)
-           }
+//            const updatetraining= await Training.findByIdAndUpdate(
+//                req.params.id,
+//                {
+//                    banner: tom,
+//                    trainingTitle: req.body.trainingTitle,
+//                    courseTitle: req.body.courseTitle,
+//                    description: req.body.description,
+//                    form: req.body.form
+//                },
+//                {
+//                    new:true
+//                }
+//                )
+//            if(!updatetraining){
+//                res.status(500).json({
+//                    success: false,
+//                    message: "the training information cannot be found"
+//                })
+//            }else{
+//                res.send(updatetraining)
+//            }
       
-      } catch (err) {
-        console.log(err);
-      }
-    });
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     });
     
 
 
